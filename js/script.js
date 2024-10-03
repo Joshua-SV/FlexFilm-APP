@@ -6,7 +6,6 @@ const global = {
 // function to get popular movies
 async function displayPopularMovies() {
     const { results } = await fetchData('movie/popular');
-    console.log(results);
     
     results.forEach(movie => {
         const div = document.createElement('div');
@@ -23,10 +22,35 @@ async function displayPopularMovies() {
         document.querySelector('#popular-movies').appendChild(div);
     });
 }
+// function for swiper mods
+function initSwiper() {
+    const swiper = new Swiper('.swiper', {
+        slidesPerView: 1,
+        spaceBetween: 30,
+        freeMode: true,
+        loop: true,
+        autoplay: {
+            delay: 4000,
+            disableOnInteraction: false,
+        },
+        breakpoints: {
+            500: {
+                slidesPerView: 2
+            },
+            700: {
+                slidesPerView: 3
+            },
+            1200: {
+                slidesPerView: 4
+            }
+        }
+    });
+}
+
 // function to get current theater movies
 async function displayCurrentMovies() {
     const { results } = await fetchData('movie/now_playing');
-    console.log(results);
+
     results.forEach(movie => {
         const div = document.createElement('div');
         div.classList.add('swiper-slide');
@@ -37,12 +61,12 @@ async function displayCurrentMovies() {
               <i class="fas fa-star text-secondary"></i> ${movie.vote_average.toFixed(1)} / 10
             </h4>`;
         document.querySelector('.swiper-wrapper').appendChild(div);
+        initSwiper();
     });
 }
 // function to get popular TV shows
 async function displayPopularTV() {
     const { results } = await fetchData('tv/popular');
-    console.log(results);
     
     results.forEach(tv => {
         const div = document.createElement('div');
@@ -101,7 +125,6 @@ function displayBackImage(type, path) {
 // function to display movie details
 async function displayDetailsMovie() {
     const movieID = window.location.search.split('=')[1];
-    console.log(movieID);
 
     const movie = await fetchData(`movie/${movieID}`);
 
@@ -148,7 +171,6 @@ async function displayDetailsMovie() {
 // function to display tv details
 async function displayDetailsTV() {
     const tvID = window.location.search.split('=')[1];
-    console.log(tvID);
 
     const tv = await fetchData(`tv/${tvID}`);
 
@@ -166,7 +188,7 @@ async function displayDetailsTV() {
                         <i class="fas fa-star text-primary"></i>
                         ${tv.vote_average.toFixed(1)} / 10
                     </p>
-                    <p class="text-muted">Release Date: ${tv.first_air_date}</p>
+                    <p class="text-muted">First Aired Date: ${tv.first_air_date}</p>
                     <p>
                         ${tv.overview}
                     </p>
